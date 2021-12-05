@@ -1,1 +1,2 @@
-# Make-Your-Own-Game-2
+# MatterJSBoilerPlate
+MatterJSBoilerPlate
