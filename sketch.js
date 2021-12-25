@@ -1,111 +1,64 @@
-var canvas
-var bike1, bike2, bike3, bike4, track;
-var dirt, rocks, bikeImg, fuelImage;
-var allPlayers, bgImg, hill, database;
-var powerCoin, crops, gameState;
-var hurdles, lifeImage, obstacles;
-var obstacle1Image, obstacle2Image, fuelImage, player, playerCount;
+var bg,bgImg;
+var player, shooterImg, shooter_shooting;
+
 
 function preload(){
-bgImg = loadImage("assets/bg.png");
-bike = loadAnimation("assets/bike1.png","assets/bike2.png","assets/bike3.png","assets/bike4.png");
-track = loadImage("assets/track.png");
-dirt = loadImage("assets/dirt.png");
-rocks = loadImage("assets/rock.png");
-powerCoin = loadImage("assets/coin.png");
-hurdles = loadImage("assets/hurdle.png");
-fuelImage = loadImage("assets/fuel.png");
-hill = loadImage("assets/hill.png");
-crops = loadImage("assets/crop.png");
-obstacle1Image = loadImage("assets/obstacle1.png");
-obstacle2Image = loadImage("assets/obstacle2.png");
-}
-
-function setup(){
-
-//background image
-bg = createSprite(200,100,200,10);
-bg.addImage(bgImg);
-bg.scale = 1.3
-
-//creating bike
-bike = createSprite(10,20,40,20);
-bike.addAnimation("bike",bikeImg);
-bike.scale = 0.5
-
-canvas = createCanvas(windowWidth, windowHeight);
-  database = firebase.database();
-  game = new Game();
-  game.getState();
-  game.start();
-}
-
-function draw() {
-	background(backgroundImage);
-	if (playerCount === 4) {
-	  game.update(1);
-	}
   
-	if (gameState === 1) {
-	  game.play();
-	}
-  
-	if (gameState === 2) {
-	  game.showLeaderboard();
-	  game.end();
-	}
-  }
-  
-  function windowResized() {
-	resizeCanvas(windowWidth, windowHeight);
-  }
-  
+  shooterImg = loadImage("assets/shooter_2.png")
+  shooter_shooting = loadImage("assets/shooter_3.png")
 
-var canvas;
-var backgroundImage, car1_img, car2_img, track;
-var fuelImage, powerCoinImage, lifeImage;
-var obstacle1Image, obstacle2Image;
-var database, gameState;
-var form, player, playerCount;
-var allPlayers, car1, car2, fuels, powerCoins, obstacles;
-var cars = [];
+  bgImg = loadImage("assets/bg.jpeg")
 
-function preload() {
-  backgroundImage = loadImage("./assets/background.png");
-  car1_img = loadImage("./assets/car1.png");
-  car2_img = loadImage("./assets/car2.png");
-  track = loadImage("./assets/track.jpg");
-  fuelImage = loadImage("./assets/fuel.png");
-  powerCoinImage = loadImage("./assets/goldCoin.png");
-  obstacle1Image = loadImage("./assets/obstacle1.png");
-  obstacle2Image = loadImage("./assets/obstacle2.png");
-  lifeImage = loadImage("./assets/life.png");
 }
 
 function setup() {
-  canvas = createCanvas(windowWidth, windowHeight);
-  database = firebase.database();
-  game = new Game();
-  game.getState();
-  game.start();
+
+  
+  createCanvas(windowWidth,windowHeight);
+
+  //adding the background image
+  bg = createSprite(displayWidth/2-20,displayHeight/2-40,20,20)
+bg.addImage(bgImg)
+bg.scale = 1.1
+  
+
+//creating the player sprite
+player = createSprite(displayWidth-1150, displayHeight-300, 50, 50);
+ player.addImage(shooterImg)
+   player.scale = 0.3
+   player.debug = true
+   player.setCollider("rectangle",0,0,300,300)
+
+
 }
 
 function draw() {
-  background(backgroundImage);
-  if (playerCount === 4) {
-    game.update(1);
-  }
+  background(0); 
 
-  if (gameState === 1) {
-    game.play();
-  }
 
-  if (gameState === 2) {
-    game.showLeaderboard();
-    game.end();
-  }
+
+
+  //moving the player up and down and making the game mobile compatible using touches
+if(keyDown("UP_ARROW")||touches.length>0){
+  player.y = player.y-30
+}
+if(keyDown("DOWN_ARROW")||touches.length>0){
+ player.y = player.y+30
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+
+//release bullets and change the image of shooter to shooting position when space is pressed
+if(keyWentDown("space")){
+ 
+  player.addImage(shooter_shooting)
+ 
+}
+
+//player goes back to original standing image once we stop pressing the space bar
+else if(keyWentUp("space")){
+  player.addImage(shooterImg)
+}
+
+drawSprites();
+
 }
